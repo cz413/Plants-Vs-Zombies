@@ -13,6 +13,8 @@ public class Plant {
     //植物的攻击速度
     private int attackSpeed;
 
+    private int cdTime;
+
     public Plant() {
     }
 
@@ -49,5 +51,13 @@ public class Plant {
 
     public void setDamage(int damage) {
         this.damage = damage;
+    }
+
+    public int getCdTime() {
+        return cdTime;
+    }
+
+    public void setCdTime(int cdTime) {
+        this.cdTime = cdTime;
     }
 }
