@@ -11,6 +11,7 @@ public class Main extends Application {
         Pane pane=new Pane();
         Scene scene=new Scene(pane,600,600);
         stage.setTitle("Plants-Vs-Zombies");
+        stage.setScene(scene);
         stage.show();
     }
 
