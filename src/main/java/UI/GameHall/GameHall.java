@@ -32,8 +32,10 @@ public class GameHall extends Application {
 /*
 * -----------------------------------------------音乐添加---------------------------------------------------------------
 * */
-
-
+        //背景音乐
+        AudioClip audioClip_BackGround=new AudioClip("file:resourses/Music/Background_BGM.wav");
+        audioClip_BackGround.setCycleCount(AudioClip.INDEFINITE);
+        audioClip_BackGround.play();
 /*
 * ---------------------------------------------Welcome界面设计-----------------------------q-----------------------------
 * */
