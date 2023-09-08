@@ -51,4 +51,6 @@ public class Zombies {
     public void setAttackSpeed(int attackSpeed) {
         this.attackSpeed = attackSpeed;
     }
+    //是否相撞
+    public boolean isOverlapped(){return false;};
 }
