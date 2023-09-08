@@ -1,6 +1,6 @@
-package Plant;
+package Plants;
 
-public class Plant {
+public class Plants {
     //植物的生命值
     private int health;
 
@@ -15,7 +15,7 @@ public class Plant {
 
     private int cdTime;
 
-    public Plant() {
+    public Plants() {
     }
 
     /*
