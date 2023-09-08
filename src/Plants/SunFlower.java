@@ -1,4 +1,4 @@
-package Plant;
+package Plants;
 
 public class SunFlower {
 }
