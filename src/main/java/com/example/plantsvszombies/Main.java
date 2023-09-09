@@ -28,9 +28,21 @@ public class Main extends Application {
     private static Scene scene_GameHall;
     //场景3————Game页面
     private static Scene scene_Game;
+    //按钮音效
+    private static AudioClip audioClip_Button;
 
     @Override
     public void start(Stage stage) throws Exception {
+        /*
+        *
+        * ---------------------------------------------初始化界面----------------------------------------------------
+        *
+        * */
+        stage.setTitle("Plants-Vs-Zombies");
+        init_WelcomeScene(stage);
+        init_GameHallScene(stage);
+        stage.setScene(scene_Welcome);
+        stage.show();
 
         /*
          * -----------------------------------------------音乐添加---------------------------------------------------------------
@@ -38,12 +50,10 @@ public class Main extends Application {
         //背景音乐
         AudioClip audioClip_BackGround=new AudioClip("file:resourses/Music/Background_BGM.wav");
         audioClip_BackGround.setCycleCount(AudioClip.INDEFINITE);
+        audioClip_Button=new AudioClip("file:resourses/Music/Button_BGM.wav");
         audioClip_BackGround.play();
-        init_WelcomeScene(stage);
-        init_GameHallScene(stage);
-        stage.setScene(scene_Welcome);
-        stage.setTitle("Plants-Vs-Zombies");
-        stage.show();
+
+
     }
 
     /*
@@ -105,6 +115,7 @@ public class Main extends Application {
                 button_GameStart.setDisable(false);
                 button_GameStart.setOnMouseEntered(mouseEvent -> {
                     imageView_Welcome.setImage(new Image("file:resourses/GameWelcome_Resourses/load (104).png"));
+                    audioClip_Button.play();
                 });
                 button_GameStart.setOnMouseExited(mouseEvent -> {
                     imageView_Welcome.setImage(new Image("file:resourses/GameWelcome_Resourses/load (103).png"));
@@ -153,7 +164,7 @@ public class Main extends Application {
         button_Start.setCursor(Cursor.HAND);
         button_Start.setOnMouseEntered(event->{
             imageView_Hall.setImage(image_Start);
-
+            audioClip_Button.play();
         });
         button_Start.setOnMouseExited(event->{
             imageView_Hall.setImage(image_GameHall);
@@ -168,7 +179,7 @@ public class Main extends Application {
         button_Mini.setCursor(Cursor.HAND);
         button_Mini.setOnMouseEntered(event->{
             imageView_Hall.setImage(image_Mini);
-
+            audioClip_Button.play();
         });
         button_Mini.setOnMouseExited(event->{
             imageView_Hall.setImage(image_GameHall);
@@ -183,7 +194,7 @@ public class Main extends Application {
         button_Puzzle.setCursor(Cursor.HAND);
         button_Puzzle.setOnMouseEntered(event->{
             imageView_Hall.setImage(image_Puzzle);
-
+            audioClip_Button.play();
         });
         button_Puzzle.setOnMouseExited(event->{
             imageView_Hall.setImage(image_GameHall);
@@ -198,7 +209,7 @@ public class Main extends Application {
         button_Survival.setCursor(Cursor.HAND);
         button_Survival.setOnMouseEntered(event->{
             imageView_Hall.setImage(image_Survival);
-
+            audioClip_Button.play();
         });
         button_Survival.setOnMouseExited(event->{
             imageView_Hall.setImage(image_GameHall);
@@ -218,32 +229,22 @@ public class Main extends Application {
     }
 
     public static void init_Scene_Game() {
-        /*
-         * -------------------------------------------------------游戏界面-------------------------------------------------------
-         * */
+/*
+ * -------------------------------------------------------游戏界面-------------------------------------------------------
+*/
         Image Background_Game = new Image("file:resourses/GameStarting_Resourses/Background0.jpg");
         ImageView imageView_Game = new ImageView(Background_Game);
 
-        // 创建平移动画1（从原始位置平移到目标位置）
-        TranslateTransition translateTransition1 = new TranslateTransition(Duration.seconds(2), imageView_Game);
-        translateTransition1.setFromX(0);  // 起始位置的X坐标
-        translateTransition1.setFromY(0);  // 起始位置的Y坐标
-        translateTransition1.setToX(-520);  // 结束位置的X坐标
-        translateTransition1.setToY(0);  // 结束位置的Y坐标
-
-        // 创建平移动画2（从目标位置平移到起始位置）
-        TranslateTransition translateTransition2 = new TranslateTransition(Duration.seconds(2), imageView_Game);
-        translateTransition2.setFromX(-520);  // 起始位置的X坐标
-        translateTransition2.setFromY(0);  // 起始位置的Y坐标
-        translateTransition2.setToX(-220);      // 结束位置的X坐标
-        translateTransition2.setToY(0);      // 结束位置的Y坐标
-
-        Pane Pane_Game=new Pane(imageView_Game);
-        // 设置动画完成后的操作
-        translateTransition1.setOnFinished(event -> {
-            // 播放动画2（从目标位置平移到起始位置）
-            translateTransition2.play();
-        });
+/*
+* -----------------------------------------------------------界面组件创建-------------------------------------------------
+* */
+        //菜单按钮
+        Button Button_Menu=new Button();
+        Button_Menu.setLayoutX(690);
+        Button_Menu.setLayoutY(0);
+        Button_Menu.setPrefHeight(42);
+        Button_Menu.setPrefWidth(108);
+        Button_Menu.setOpacity(0.0);
 
         //阳光数目显示
         Label numSun=new Label("50");
@@ -254,14 +255,6 @@ public class Main extends Application {
         numSun.setAlignment(Pos.CENTER);
         Font font = Font.font("Arial", FontWeight.BOLD, 20);
         numSun.setFont(font);
-
-        //菜单按钮
-        Button back0=new Button();
-        back0.setLayoutX(690);
-        back0.setLayoutY(0);
-        back0.setPrefHeight(42);
-        back0.setPrefWidth(108);
-        back0.setOpacity(0.0);
 
 
         //小推车
@@ -282,36 +275,80 @@ public class Main extends Application {
         car5.setLayoutX(-50);
         car5.setLayoutY(460);
 
+        //选择植物界面上开始游戏按钮
+        Button Button_StartGame=new Button();
+        Button_StartGame.setPrefHeight(30);
+        Button_StartGame.setPrefWidth(150);
+        Button_StartGame.setLayoutX(157);
+        Button_StartGame.setLayoutY(463);
+        Button_StartGame.setOpacity(0.0);
+        Button_StartGame.setCursor(Cursor.HAND);
 
+        //选择植物界面
+        Pane Pane_plantChoose=new Pane();
+        Pane_plantChoose.setLayoutX(10);
+        Pane_plantChoose.setLayoutY(87);
+        Image image_PlantChoose=new Image("file:resourses/GameStarting_Resourses/PanelBackground.png");
+        ImageView ImageView_PlantChoose=new ImageView(image_PlantChoose);
 
-        translateTransition2.setOnFinished(event -> {
+        Pane_plantChoose.getChildren().addAll(ImageView_PlantChoose,Button_StartGame);
+
+        // 创建平移动画1（从原始位置平移到目标位置）
+        TranslateTransition translateTransition1 = new TranslateTransition(Duration.seconds(2), imageView_Game);
+        translateTransition1.setFromX(0);  // 起始位置的X坐标
+        translateTransition1.setFromY(0);  // 起始位置的Y坐标
+        translateTransition1.setToX(-520);  // 结束位置的X坐标
+        translateTransition1.setToY(0);  // 结束位置的Y坐标
+
+        // 创建平移动画2（从目标位置平移到起始位置）
+        TranslateTransition translateTransition2 = new TranslateTransition(Duration.seconds(2), imageView_Game);
+        translateTransition2.setFromX(-520);  // 起始位置的X坐标
+        translateTransition2.setFromY(0);  // 起始位置的Y坐标
+        translateTransition2.setToX(-220);      // 结束位置的X坐标
+        translateTransition2.setToY(0);      // 结束位置的Y坐标
+
+        Pane Pane_Game=new Pane(imageView_Game);
+/*
+* ---------------------------------------------------界面动画------------------------------------------------------------
+* */
+
+        // 设置动画完成后的操作
+        translateTransition1.setOnFinished(event -> {
+            // 播放动画2（从目标位置平移到起始位置）
             // 动画结束,出现卡槽等
-            Image slot0=new Image("file:resourses/GameStarting_Resourses/slot01.png");
-            Image shoveBank0=new Image("file:resourses/GameStarting_Resourses/ShovelBank.png");
-            Image shove0=new Image("file:resourses/GameStarting_Resourses/showel.png");
-            Image back1=new Image("file:resourses/GameStarting_Resourses/back02.png");
-            Image back2=new Image("file:resourses/GameStarting_Resourses/back03.png");
-            ImageView plantSlot=new ImageView(slot0);
-            ImageView shoveBank=new ImageView(shoveBank0);
-            ImageView shove=new ImageView(shove0);
-            ImageView back01=new ImageView(back1);
-            plantSlot.setLayoutX(10);
-            plantSlot.setLayoutY(0);
-            shoveBank.setLayoutX(512);
-            shoveBank.setLayoutY(0);
-            shove.setLayoutX(513);
-            shove.setLayoutY(0);
-            back01.setLayoutX(685);
-            back01.setLayoutY(0);
-            //游戏页面菜单部分的鼠标悬停，菜单按钮颜色变化
-            back0.setOnMouseEntered(Event->{
-                back01.setImage(back2);
-            });
-            back0.setOnMouseExited(Event->{
-                back01.setImage(back1);
-            });
-            Pane_Game.getChildren().addAll(plantSlot,shoveBank,shove,back01,back0,numSun,car1,car2,car3,car4,car5);
+            Image image_Plant_Slot=new Image("file:resourses/GameStarting_Resourses/Plant_Slot.png");
+            Image image_shove_Background=new Image("file:resourses/GameStarting_Resourses/ShovelBank.png");
+            Image image_shovel=new Image("file:resourses/GameStarting_Resourses/shovel.png");
+            Image image_Menu_BackGround=new Image("file:resourses/GameStarting_Resourses/Menu_Background.png");
+            Image image_Menu_Background_Clicked=new Image("file:resourses/GameStarting_Resourses/Menu_Background_Clicked.png");
 
+            ImageView imageView_plantSlot=new ImageView(image_Plant_Slot);
+            ImageView imageView_shoveBank=new ImageView(image_shove_Background);
+            ImageView imageView_shovel=new ImageView(image_shovel);
+            ImageView imageView_Menu_BackGround=new ImageView(image_Menu_BackGround);
+            imageView_plantSlot.setLayoutX(10);
+            imageView_plantSlot.setLayoutY(0);
+            imageView_shoveBank.setLayoutX(512);
+            imageView_shoveBank.setLayoutY(0);
+            imageView_shovel.setLayoutX(513);
+            imageView_shovel.setLayoutY(0);
+            imageView_Menu_BackGround.setLayoutX(685);
+            imageView_Menu_BackGround.setLayoutY(0);
+            //游戏页面菜单部分的鼠标悬停，菜单按钮颜色变化
+            Button_Menu.setOnMouseEntered(Event->{
+                imageView_Menu_BackGround.setImage(image_Menu_Background_Clicked);
+                audioClip_Button.play();
+            });
+            Button_Menu.setOnMouseExited(Event->{
+                imageView_Menu_BackGround.setImage(image_Menu_BackGround);
+            });
+            Pane_Game.getChildren().addAll(imageView_plantSlot,imageView_shoveBank,imageView_shovel,imageView_Menu_BackGround,Button_Menu,numSun,Pane_plantChoose);
+
+        });
+
+
+        //回到草坪显示卡槽小推车等
+        translateTransition2.setOnFinished(event -> {
             /*
             * 临时代码
             * 作用：设置卡槽出现时候自带一个植物卡片
@@ -323,7 +360,7 @@ public class Main extends Application {
             label_peaShooter.setGraphic(img_peaShooterCard);
             label_peaShooter.setLayoutX(87);
             label_peaShooter.setLayoutY(2);
-            Pane_Game.getChildren().add(label_peaShooter);
+            Pane_Game.getChildren().addAll(label_peaShooter,car1,car2,car3,car4,car5);
 
             label_peaShooter.setOnMouseClicked(label_peaShooter_event->{
                 System.out.println("我被点击楽");
@@ -339,9 +376,13 @@ public class Main extends Application {
                         isClicked.set(true);
                     });
                 });
-                Pane_Game.getChildren().add(peaShooterPre);
+                Pane_Game.getChildren().addAll(peaShooterPre);
             });
 
+        });
+        Button_StartGame.setOnAction(Event->{
+            Pane_Game.getChildren().remove(Pane_plantChoose);
+            translateTransition2.play();
         });
 
         // 播放动画1（从原始位置平移到目标位置）

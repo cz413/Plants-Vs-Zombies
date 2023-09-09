@@ -297,11 +297,11 @@ public class GameHall extends Application {
 
         translateTransition2.setOnFinished(event -> {
             // 动画结束,出现卡槽等
-            Image slot0=new Image("file:resourses/GameStarting_Resourses/slot01.png");
+            Image slot0=new Image("file:resourses/GameStarting_Resourses/Plant_Slot.png");
             Image shoveBank0=new Image("file:resourses/GameStarting_Resourses/ShovelBank.png");
-            Image shove0=new Image("file:resourses/GameStarting_Resourses/showel.png");
-            Image back1=new Image("file:resourses/GameStarting_Resourses/back02.png");
-            Image back2=new Image("file:resourses/GameStarting_Resourses/back03.png");
+            Image shove0=new Image("file:resourses/GameStarting_Resourses/shovel.png");
+            Image back1=new Image("file:resourses/GameStarting_Resourses/Menu_Background.png");
+            Image back2=new Image("file:resourses/GameStarting_Resourses/Menu_Background_Clicked.png");
             ImageView plantSlot=new ImageView(slot0);
             ImageView shoveBank=new ImageView(shoveBank0);
             ImageView shove=new ImageView(shove0);
