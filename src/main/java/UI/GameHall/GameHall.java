@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+//import javafx.scene.media.AudioClip;
 import javafx.scene.media.AudioClip;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -29,13 +30,7 @@ public class GameHall extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-/*
-* -----------------------------------------------音乐添加---------------------------------------------------------------
-* */
-        //背景音乐
-        AudioClip audioClip_BackGround=new AudioClip("file:resourses/Music/Background_BGM.wav");
-        audioClip_BackGround.setCycleCount(AudioClip.INDEFINITE);
-        audioClip_BackGround.play();
+
 /*
 * ---------------------------------------------Welcome界面设计-----------------------------q-----------------------------
 * */
@@ -108,7 +103,7 @@ public class GameHall extends Application {
                 "file:resourses/GameWelcome_Resourses/load (99).png", "file:resourses/GameWelcome_Resourses/load (100).png",
                 "file:resourses/GameWelcome_Resourses/load (101).png","file:resourses/GameWelcome_Resourses/load (102).png",
                 "file:resourses/GameWelcome_Resourses/load (103).png"
-        };                                                                
+        };
 
         // 创建一个时间轴对象
         Timeline timeline = new Timeline();
@@ -120,9 +115,9 @@ public class GameHall extends Application {
             KeyFrame keyFrame = new KeyFrame(Duration.millis(90 * (i + 1)),
                     event -> imageView_Welcome.setImage(image));
             timeline.getKeyFrames().add(keyFrame);
-            if(i==imageFiles.length-1){
-
-            }
+//            if(i==imageFiles.length-1){
+//
+//            }
         }
 
         // 设置循环次数
@@ -133,11 +128,7 @@ public class GameHall extends Application {
 
 
         /*
-        *
-        *
         * --------------------------------------------游戏大厅界面设计----------------------------------------------------
-        *
-        *
         * */
 
         //大厅场景以及按钮高亮的图片
@@ -236,6 +227,7 @@ public class GameHall extends Application {
                 });
             }
         });
+
 
 /*
 * -------------------------------------------------------游戏界面-------------------------------------------------------
@@ -354,9 +346,11 @@ public class GameHall extends Application {
             translateTransition1.play();//界面平移操作
         });
 
+
     }
 
-    public static void main(String[] args) {
-        Application.launch(args);
-    }
+//    public static void main(String[] args) {
+//        launch(args);
+//    }
+
 }
