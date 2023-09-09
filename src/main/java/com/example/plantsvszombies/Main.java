@@ -1,17 +1,22 @@
 package com.example.plantsvszombies;
 
+import Other.PlantsCard;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
+import javafx.event.Event;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.AudioClip;
 import javafx.scene.text.Font;
@@ -19,6 +24,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Main extends Application {
@@ -41,7 +47,7 @@ public class Main extends Application {
         stage.setTitle("Plants-Vs-Zombies");
         init_WelcomeScene(stage);
         init_GameHallScene(stage);
-        stage.setScene(scene_Welcome);
+        stage.setScene(scene_GameHall);
         stage.show();
 
         /*
@@ -308,6 +314,14 @@ public class Main extends Application {
         translateTransition2.setToY(0);      // 结束位置的Y坐标
 
         Pane Pane_Game=new Pane(imageView_Game);
+
+        /*
+         * 创建植物卡槽中的Hbox布局用来存放植物卡片
+         *
+         * */
+        HBox slotHBox=new HBox();
+        slotHBox.setLayoutX(87);
+        slotHBox.setLayoutY(2);
 /*
 * ---------------------------------------------------界面动画------------------------------------------------------------
 * */
@@ -334,6 +348,75 @@ public class Main extends Application {
             imageView_shovel.setLayoutY(0);
             imageView_Menu_BackGround.setLayoutX(685);
             imageView_Menu_BackGround.setLayoutY(0);
+
+
+
+
+            /*
+             * 选择植物的卡槽————固定植物卡片
+             * */
+//            固定豌豆射手卡片
+            PlantsCard peaShooter_card=new PlantsCard("PeaShooter");
+            peaShooter_card.setPlantsCards_lab_position(18,35);
+//          固定向日葵卡片
+            PlantsCard sunFlower_card=new PlantsCard("SunFlower");
+            sunFlower_card.setPlantsCards_lab_position(72,35);
+//          固定樱桃炸弹卡片
+            PlantsCard cherry_card=new PlantsCard("Cherry");
+            cherry_card.setPlantsCards_lab_position(126,35);
+            Pane_plantChoose.getChildren().addAll(peaShooter_card.getPlantsCards_lab(),sunFlower_card.getPlantsCards_lab(),
+                    cherry_card.getPlantsCards_lab());
+
+
+
+
+            //对植物选择卡槽容器中所有的卡片添加点击事件
+            // 遍历所有Label，为每个Label添加事件处理程序
+            for (Node node : Pane_plantChoose.getChildren()) {
+                if (node instanceof Label) {
+                    Label label = (Label) node;
+                    label.setOnMouseClicked(label_clickedevent -> {
+                        ColorAdjust colorAdjust=new ColorAdjust();
+                        colorAdjust.setBrightness(-0.5);
+                        colorAdjust.setSaturation(0);
+
+                        ColorAdjust colorAdjust_clicked=new ColorAdjust();
+                        colorAdjust_clicked.setBrightness(0);
+                        colorAdjust_clicked.setSaturation(0);
+                        label.getGraphic().setEffect(colorAdjust);
+                        if(Objects.equals(label.getId(), "PeaShooter")){
+                            PlantsCard peaShooter_card_inslot=new PlantsCard("PeaShooter");
+                            slotHBox.getChildren().add(peaShooter_card_inslot.getPlantsCards_lab());
+                            //设置上方卡槽中的卡片的点击事件
+                            peaShooter_card_inslot.getPlantsCards_lab().setOnMouseClicked(peaShooter_card_inslot_e->{
+                                peaShooter_card.getPlantsCards_lab().getGraphic().setEffect(colorAdjust_clicked);
+                                slotHBox.getChildren().remove(peaShooter_card_inslot.getPlantsCards_lab());
+                            });
+                        }
+                        else if(Objects.equals(label.getId(), "SunFlower")){
+                            PlantsCard sunFlower_card_inslot=new PlantsCard("SunFlower");
+                            slotHBox.getChildren().add(sunFlower_card_inslot.getPlantsCards_lab());
+                            sunFlower_card_inslot.getPlantsCards_lab().setOnMouseClicked(sunFlower_card_inslot_e->{
+                                sunFlower_card.getPlantsCards_lab().getGraphic().setEffect(colorAdjust_clicked);
+                                slotHBox.getChildren().remove(sunFlower_card_inslot.getPlantsCards_lab());
+                            });
+
+                        }
+                        else if(Objects.equals(label.getId(), "Cherry")){
+                            PlantsCard cherry_card_inslot=new PlantsCard("Cherry");
+                            slotHBox.getChildren().add(cherry_card_inslot.getPlantsCards_lab());
+                            cherry_card_inslot.getPlantsCards_lab().setOnMouseClicked(cherry_card_inslot_e->{
+                                cherry_card.getPlantsCards_lab().getGraphic().setEffect(colorAdjust_clicked);
+                                slotHBox.getChildren().remove(cherry_card_inslot.getPlantsCards_lab());
+                            });
+                        }
+                    });
+                }
+            }
+
+
+
+
             //游戏页面菜单部分的鼠标悬停，菜单按钮颜色变化
             Button_Menu.setOnMouseEntered(Event->{
                 imageView_Menu_BackGround.setImage(image_Menu_Background_Clicked);
@@ -342,42 +425,38 @@ public class Main extends Application {
             Button_Menu.setOnMouseExited(Event->{
                 imageView_Menu_BackGround.setImage(image_Menu_BackGround);
             });
-            Pane_Game.getChildren().addAll(imageView_plantSlot,imageView_shoveBank,imageView_shovel,imageView_Menu_BackGround,Button_Menu,numSun,Pane_plantChoose);
+            Pane_Game.getChildren().addAll(imageView_plantSlot,imageView_shoveBank,imageView_shovel,imageView_Menu_BackGround,Button_Menu,numSun,Pane_plantChoose,slotHBox);
 
         });
 
 
-        //回到草坪显示卡槽小推车等
+        //回到草坪显示卡槽小推车等 同时设置卡槽中的卡片的事件
         translateTransition2.setOnFinished(event -> {
-            /*
-            * 临时代码
-            * 作用：设置卡槽出现时候自带一个植物卡片
-            * */
-            ImageView img_peaShooterCard=new ImageView(new Image("file:resourses/PlantsCard/PeaShooter.png"));
-            img_peaShooterCard.setFitHeight(76);
-            img_peaShooterCard.setFitWidth(63);
-            Label label_peaShooter=new Label();
-            label_peaShooter.setGraphic(img_peaShooterCard);
-            label_peaShooter.setLayoutX(87);
-            label_peaShooter.setLayoutY(2);
-            Pane_Game.getChildren().addAll(label_peaShooter,car1,car2,car3,car4,car5);
-
-            label_peaShooter.setOnMouseClicked(label_peaShooter_event->{
-                System.out.println("我被点击楽");
-                ImageView peaShooterPre=new ImageView(new Image("file:resourses/Plant/img.png"));
-                peaShooterPre.setOpacity(0.7);
-                scene_Game.setOnMouseMoved(peaShooterPre_event->{
-                    AtomicBoolean isClicked= new AtomicBoolean(false);
-                    if(isClicked.get() ==false){
-                        peaShooterPre.setLayoutX(peaShooterPre_event.getX());
-                        peaShooterPre.setLayoutY(peaShooterPre_event.getY());
-                    }
-                    scene_Game.setOnMouseClicked(e->{
-                        isClicked.set(true);
+            Pane_Game.getChildren().addAll(car1,car2,car3,car4,car5);
+            slotHBox.getChildren().forEach(node -> {
+                if (node instanceof Label) {
+                    Label label = (Label) node;
+                    label.setOnMouseClicked(slotHbox_clicked_event -> {
+                        System.out.println(label.getId() + "被点击了！");
+                        ImageView prePlant=new ImageView(new Image("file:resourses/Plant/"+label.getId()+".gif"));
+                        prePlant.setOpacity(0.7);
+                        Pane_Game.getChildren().add(prePlant);
+                        Pane_Game.setOnMouseMoved(prePlant_move_event->{
+                            prePlant.setLayoutX(prePlant_move_event.getX()-20);
+                            prePlant.setLayoutY(prePlant_move_event.getY()-30);
+                            Pane_Game.setOnMouseClicked(PrePlant_moved_click_event->{
+                                Pane_Game.getChildren().remove(prePlant);
+                                ImageView plantedPlant=new ImageView(new Image("file:resourses/Plant/"+label.getId()+".gif"));
+                                plantedPlant.setLayoutX(prePlant_move_event.getX());
+                                plantedPlant.setLayoutY(prePlant_move_event.getY());
+                                Pane_Game.getChildren().add(plantedPlant);
+                            });
+                        });
                     });
-                });
-                Pane_Game.getChildren().addAll(peaShooterPre);
+                }
             });
+
+
 
         });
         Button_StartGame.setOnAction(Event->{
