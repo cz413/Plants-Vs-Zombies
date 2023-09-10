@@ -313,6 +313,7 @@ public class Main extends Application {
         translateTransition2.setToX(-220);      // 结束位置的X坐标
         translateTransition2.setToY(0);      // 结束位置的Y坐标
 
+
         Pane Pane_Game=new Pane(imageView_Game);
 
         /*
@@ -440,6 +441,8 @@ public class Main extends Application {
                         System.out.println(label.getId() + "被点击了！");
                         ImageView prePlant=new ImageView(new Image("file:resourses/Plant/"+label.getId()+".gif"));
                         prePlant.setOpacity(0.7);
+                        prePlant.setLayoutY(label.getLayoutY());
+                        prePlant.setLayoutX(label.getLayoutX());
                         Pane_Game.getChildren().add(prePlant);
                         Pane_Game.setOnMouseMoved(prePlant_move_event->{
                             prePlant.setLayoutX(prePlant_move_event.getX()-20);
@@ -447,11 +450,14 @@ public class Main extends Application {
                             Pane_Game.setOnMouseClicked(PrePlant_moved_click_event->{
                                 Pane_Game.getChildren().remove(prePlant);
                                 ImageView plantedPlant=new ImageView(new Image("file:resourses/Plant/"+label.getId()+".gif"));
-                                plantedPlant.setLayoutX(prePlant_move_event.getX());
-                                plantedPlant.setLayoutY(prePlant_move_event.getY());
+                                plantedPlant.setLayoutX(prePlant_move_event.getX()-20);
+                                plantedPlant.setLayoutY(prePlant_move_event.getY()-30);
                                 Pane_Game.getChildren().add(plantedPlant);
+
                             });
                         });
+                        Pane_Game.setOnMouseClicked(null);
+
                     });
                 }
             });
