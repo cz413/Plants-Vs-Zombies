@@ -1,63 +1,86 @@
 package Plants;
 
-public class Plants {
-    //植物的生命值
-    private int health;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.util.Duration;
 
-    //种植植物所需要花费的阳光数
-    private int sunCost;
+public abstract class Plants {
 
-    //植物的伤害值
-    private int damage;
+    private ImageView imageView;
+    private Image[] images;
+    private int numFrames; //每个植物的静态图数量
+    private int currentFrame;//每个植物的静态图索引
 
-    //植物的攻击速度
-    private int attackSpeed;
+    private static final Duration FRAME_DURATION = Duration.millis(100); // 每个静态图的持续时间
+    public Plants(){}
 
-    private int cdTime;
-
-    public Plants() {
+    public Plants(String[] imagePaths){
+        images = new Image[imagePaths.length];
+        for(int i=0;i<imagePaths.length;i++){
+            images[i] = new Image(imagePaths[i]);
+        }
+        //一共传入的静态图数量
+        numFrames = imagePaths.length;
+        //用于显示植物的第一张静态图像
+        imageView = new ImageView(images[0]);
     }
 
-    /*
-    下方代码均为set和get方法
-     */
-    public int getAttackSpeed() {
-        return attackSpeed;
+    public void showAnimation(){
+        imageView.setTranslateX(0);
+        imageView.setTranslateY(50);
+        Timeline timeline = new Timeline();
+        timeline.setCycleCount(Timeline.INDEFINITE); // 无限次
+
+        KeyFrame keyFrame = new KeyFrame(FRAME_DURATION, event->{
+            imageView.setImage(images[currentFrame]);
+            currentFrame = (currentFrame + 1) % numFrames;
+        });
+        timeline.getKeyFrames().add(keyFrame);
+        timeline.play();
     }
 
-    public void setAttackSpeed(int attackSpeed) {
-        this.attackSpeed = attackSpeed;
-    }
+    public void shoot(){
+        // 创建TranslateTransition来控制豌豆的水平移动
+        TranslateTransition peaTransition = new TranslateTransition(Duration.seconds(3),imageView);
+        peaTransition.setFromX(imageView.getTranslateX()); // 起始X坐标为植物的位置
+        peaTransition.setToX(700); // 结束X坐标为700
+        peaTransition.setCycleCount(Timeline.INDEFINITE); // 设置循环次数为无限
+        peaTransition.setAutoReverse(false); // 设置不自动反向播放
 
-    public int getHealth() {
-        return health;
-    }
+        // 创建Timeline来切换豌豆的静态图
+        Timeline peaTimeline1 = new Timeline();
+        peaTimeline1.setCycleCount(Timeline.INDEFINITE);
 
-    public void setHealth(int health) {
-        this.health = health;
-    }
+        KeyFrame peaKeyFrame1 = new KeyFrame(FRAME_DURATION, event -> {
+            // 更新豌豆的图像
+            imageView.setImage(images[currentFrame]);
 
-    public int getSunCost() {
-        return sunCost;
-    }
+            // 更新当前静态图的索引
+            currentFrame = (currentFrame + 1) % numFrames;
+        });
+        peaTimeline1.getKeyFrames().add(peaKeyFrame1);
+        peaTimeline1.setOnFinished(event -> peaTransition.stop()); // 当豌豆的Timeline完成时停止豌豆的移动
+        peaTimeline1.play();
 
-    public void setSunCost(int sunCost) {
-        this.sunCost = sunCost;
-    }
 
-    public int getDamage() {
-        return damage;
-    }
+//        Timeline peaTimeline2 = new Timeline();
+//        peaTimeline2.setCycleCount(Timeline.INDEFINITE);
+//        KeyFrame peaKeyFrame2 = new KeyFrame(FRAME_DURATION, event -> {
+//            // 更新豌豆的图像
+//            imageView.setImage(images[currentFrame]);
+//            // 更新当前静态图的索引
+//            currentFrame = (currentFrame + 1) % numFrames;
+//        });
+//        peaTimeline2.getKeyFrames().add(peaKeyFrame2);
+//        peaTimeline2.setOnFinished(event -> peaTransition.stop()); // 当豌豆的Timeline完成时停止豌豆的移动
+//        peaTimeline2.play();
 
-    public void setDamage(int damage) {
-        this.damage = damage;
+        peaTransition.play();
     }
-
-    public int getCdTime() {
-        return cdTime;
-    }
-
-    public void setCdTime(int cdTime) {
-        this.cdTime = cdTime;
+    public ImageView getImageView() {
+        return imageView;
     }
 }
